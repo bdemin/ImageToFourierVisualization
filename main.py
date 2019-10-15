@@ -5,6 +5,9 @@ from matplotlib.patches import Circle
 from matplotlib.lines import Line2D
 from matplotlib.animation import FuncAnimation
 
+from dft import dft
+from load_json import load_json
+
 
 class Clock(object):
     def __init__(self, start_pos, radius, angle):
@@ -41,10 +44,8 @@ def func(frame, ax1, clocks):
     return artists
 
 def init():
-    # plt.gca().set_xlim(-50, 50)
-    # plt.gca().set_ylim(-50, 50)
-    plt.gca().set_xlim(-5, 5)
-    plt.gca().set_ylim(-5, 5)
+    plt.gca().set_xlim(-50, 50)
+    plt.gca().set_ylim(-50, 50)
     plt.gca().set_aspect(1)
     return []
 
