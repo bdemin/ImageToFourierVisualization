@@ -1,71 +1,115 @@
 import numpy as np
+import sys
 
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
-from matplotlib.lines import Line2D
-from matplotlib.animation import FuncAnimation
+import pygame
 
 from dft import dft
 from load_json import load_json
 
 
-class Clock(object):
-    def __init__(self, start_pos, radius, angle):
+class Graphics(object):
+    def __init__(self):
 
-        self.radius = radius
-        self.angle = angle
-        self.start_pos = start_pos
-        self.end_pos = self.start_pos + self.radius * np.array((np.cos(self.angle), np.sin(self.angle)))
+        pygame.init()
+        self.screen_size = (800, 600)
+        self.screen = pygame.display.set_mode(self.screen_size, 0, 32)
+        self.clock = pygame.time.Clock()
+     
 
-        self.draw()
+    def init_callback(self, epicycles):
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
+            self.screen.fill((0, 0, 0))
+            time = pygame.time.get_ticks()/1000
+
+            flag = True
+            for epicycle in epicycles:
+                if flag:
+                    epicycle.update((400, 300), time)
+                    last_center_pos = epicycle.dial_end_pos
+                    flag = False
+                else:
+                    epicycle.update(last_center_pos, time)
+                    last_center_pos = epicycle.dial_end_pos
+                epicycle.move()
+
+            pygame.display.flip()
+            self.clock.tick(100)
 
 
-    def get_circle_patch(self):
-        self.circ_patch = Circle(self.start_pos, self.radius, fill=False)
-        return self.circ_patch
+class Epicycle(object):
+    def __init__(self, screen, amp, freq, phase, center_pos):
+        # Create Epicycle object to store signal data for visualization
 
-    def get_line(self):
-        xdata = (self.start_pos[0], self.end_pos[0])
-        ydata = (self.start_pos[1], self.end_pos[1])
-        self.line = Line2D(xdata, ydata, linewidth=0.5)
-        return self.line
-
-    def draw(self):
-        plt.gca().add_patch(self.get_circle_patch())
-        plt.gca().add_line(self.get_line())
+        self.screen = screen
         
+        self.amp = amp
+        self.freq = freq
+        self.phase = phase
+        self.center_pos = center_pos
+        
+        self.update(self.center_pos, 0)
 
-def func(frame, ax1, clocks):
-    artists = []
 
-    for clock in clocks:
-        clock.draw()
+
+    def update(self, center_pos, time):
+        # Update center and end positions in time
+        
+        self.center_pos = center_pos
+        phi = self.freq * time + self.phase
+        self.dial_end_pos = self.center_pos + self.amp * np.array((np.cos(phi), np.sin(phi)))
+        self.dial_end_pos = (int(self.dial_end_pos[0]), int(self.dial_end_pos[1]))
     
-    return artists
+    def move(self):
+        # self.circle.move(self.center_pos)
+        self.circle = pygame.draw.circle(self.screen, (255, 255, 255),
+                                        self.center_pos, self.amp, 1)
+        self.line = pygame.draw.line(self.screen, (255, 255, 255),
+                                        self.center_pos, self.dial_end_pos, 2)
 
-def init():
-    plt.gca().set_xlim(-50, 50)
-    plt.gca().set_ylim(-50, 50)
-    plt.gca().set_aspect(1)
-    return []
+
+
+def build_data(N):
+    
+    center_pos = (400, 300)
+    amp = 100
+    freq = -1
+    phase = 0
+
+    data = []
+    for i in range(N):
+        data.append({'amp': amp, 'freq': freq, 'phase': phase})
+        amp = int(amp * 0.6)
+        freq *= 1.5
+        phase -= np.pi/4
+    return data
+
+def build_epicycles(N, screen, data):
+    
+    epicycles = []
+    center_pos = (0,0)
+    for i in range(N):
+        epicycles.append(Epicycle(screen, data[i]['amp'], data[i]['freq'], data[i]['phase'], center_pos))
+        center_pos = epicycles[-1].dial_end_pos
+    return epicycles
+
 
 def main():
-    fig1, ax1 = plt.subplots()
+    NUM_CYC = 5
 
-    N = 3
-    clocks = []
+    graphics = Graphics()
 
-    position = np.array((0,0))
-    radius = 0.2
-    angle = 0
-    for i in range(N):
-        clocks.append(Clock(position, radius, angle))
-        position = clocks[-1].end_pos
-        radius += 0.2
-        angle += np.deg2rad(30)
+    data = build_data(NUM_CYC)
 
-    anim = FuncAnimation(fig1, func, frames=None, init_func=init, fargs = (ax1, clocks), interval=100, blit=True, repeat=True)
-    plt.show()
+    epicycles = build_epicycles(NUM_CYC, graphics.screen, data)
+
+    graphics.init_callback(epicycles)
+
 
 if __name__ == '__main__':
     main()
