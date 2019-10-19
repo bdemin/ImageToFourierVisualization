@@ -28,15 +28,10 @@ class Graphics(object):
             self.screen.fill((0, 0, 0))
             time = pygame.time.get_ticks()/1000
 
-            flag = True
+            last_center_pos = (600, 400)
             for epicycle in epicycles:
-                if flag:
-                    epicycle.update((600, 400), time)
-                    last_center_pos = epicycle.dial_end_pos
-                    flag = False
-                else:
-                    epicycle.update(last_center_pos, time)
-                    last_center_pos = epicycle.dial_end_pos
+                epicycle.update(last_center_pos, time)
+                last_center_pos = epicycle.dial_end_pos
                 epicycle.move()
 
             pygame.display.flip()
