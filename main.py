@@ -12,7 +12,7 @@ class Graphics(object):
 
     def __init__(self):
         pygame.init()
-        self.screen_size = (800, 600)
+        self.screen_size = (1200, 800)
         self.screen = pygame.display.set_mode(self.screen_size, 0, 32)
         self.clock = pygame.time.Clock()
      
@@ -31,7 +31,7 @@ class Graphics(object):
             flag = True
             for epicycle in epicycles:
                 if flag:
-                    epicycle.update((400, 300), time)
+                    epicycle.update((600, 400), time)
                     last_center_pos = epicycle.dial_end_pos
                     flag = False
                 else:
@@ -75,7 +75,7 @@ def build_data(N):
     # Function to build and return signal data for all epicycles
     
     data = []
-    center_pos = (400, 300)
+    center_pos = (600, 400)
 
     # Arbitrary signal data
     amp = 100
