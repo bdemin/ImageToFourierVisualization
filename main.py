@@ -62,9 +62,10 @@ class Epicycle(object):
 
     def update(self, center_pos, time):
         # Update center and end positions in time
+
+        phi = self.freq * time + self.phase
         
         self.center_pos = center_pos
-        phi = self.freq * time + self.phase
         self.dial_end_pos = self.center_pos + self.amp * np.array((np.cos(phi), np.sin(phi)))
         self.dial_end_pos = (int(self.dial_end_pos[0]), int(self.dial_end_pos[1]))
     
