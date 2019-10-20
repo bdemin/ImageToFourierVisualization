@@ -47,8 +47,10 @@ class Graphics(object):
 
             self.time += dt
 
+            if self.time >= 2 * np.pi:
+                self.time = 0
+                self.end_points.clear()
 
-            
 class Epicycle(object):
     # Create Epicycle object to store signal data for visualization
 
