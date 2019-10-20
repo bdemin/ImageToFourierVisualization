@@ -18,10 +18,10 @@ class Graphics(object):
         self.time = 0
         self.end_points = []
      
-    def init_callback(self, epicycles):
+    def init_callback(self):
         # Begin visualization loop
 
-        dt = 2 * np.pi / len(epicycles)
+        dt = 2 * np.pi / len(self.epicycles)
         running = True
 
         while running:
@@ -33,15 +33,9 @@ class Graphics(object):
                     
             self.screen.fill((0, 0, 0))
 
-            last_center_pos = (self.screen_size / 2).astype(int)
-            for epicycle in epicycles:
-                epicycle.update(last_center_pos, self.time)
-                last_center_pos = epicycle.dial_end_pos
-                epicycle.move()
+            self.update_epicycles()
 
-            self.end_points.append(epicycles[-1].dial_end_pos)
-            if len(self.end_points) > 1:
-                pygame.draw.aalines(self.screen, (50,255,50), False, self.end_points)
+            self.trace_drawing()
 
             pygame.display.flip()
             self.clock.tick(10)
@@ -52,6 +46,19 @@ class Graphics(object):
                 self.time = 0
                 self.end_points.clear()
 
+    def update_epicycles(self):
+        last_center_pos = (self.screen_size / 2).astype(int)
+        for epicycle in self.epicycles:
+            epicycle.update(last_center_pos, self.time)
+            last_center_pos = epicycle.dial_end_pos
+            epicycle.move()
+
+    def trace_drawing(self):
+        self.end_points.append(self.epicycles[-1].dial_end_pos)
+        if len(self.end_points) > 1:
+            pygame.draw.aalines(self.screen, (50,255,50), False, self.end_points)
+
+            
 class Epicycle(object):
     # Create Epicycle object to store signal data for visualization
 
@@ -123,9 +130,9 @@ def main():
     file = 'train.json'
     data = dft(load_json(file))
 
-    epicycles = build_epicycles(graphics.screen, data)
+    graphics.epicycles = build_epicycles(graphics.screen, data)
 
-    graphics.init_callback(epicycles)
+    graphics.init_callback()
 
 
 if __name__ == '__main__':
