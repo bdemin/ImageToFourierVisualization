@@ -121,14 +121,6 @@ def build_epicycles(screen, data):
     return epicycles
 
 
-def get_center_point(data):
-    x_min = min(data[:,0])
-    x_max = max(data[:,0])
-    y_min = min(data[:,1])
-    y_max = max(data[:,1])
-    return (x_max - x_min, y_max - y_min)
-
-
 def main():
     graphics = Graphics()
 
