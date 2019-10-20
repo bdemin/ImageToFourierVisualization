@@ -15,6 +15,8 @@ class Graphics(object):
         self.screen_size = (1200, 800)
         self.screen = pygame.display.set_mode(self.screen_size, 0, 32)
         self.clock = pygame.time.Clock()
+
+        self.end_points = []
      
     def init_callback(self, epicycles):
         # Begin visualization loop
@@ -33,6 +35,10 @@ class Graphics(object):
                 epicycle.update(last_center_pos, time)
                 last_center_pos = epicycle.dial_end_pos
                 epicycle.move()
+
+            self.end_points.append(epicycles[-1].dial_end_pos)
+            if len(self.end_points) > 1:
+                pygame.draw.aalines(self.screen, (50,255,50), False, self.end_points)
 
             pygame.display.flip()
             self.clock.tick(100)
