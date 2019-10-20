@@ -92,7 +92,6 @@ def build_data(N):
     # Optional function to build and return signal data for all epicycles
     
     data = []
-    center_pos = (600, 400)
 
     # Arbitrary signal data
     amp = 100
@@ -137,7 +136,7 @@ def main():
     # data = build_data(NUM_CYCLES)
     file = 'train.json'
     data = dft(load_json(file))
-    find_center_point(data)
+
     graphics.epicycles = build_epicycles(graphics.screen, data)
 
     graphics.init_callback()
