@@ -23,5 +23,5 @@ def dft(x):
         X.append({'freq': freq,
                 'amp': amp,
                 'phase': phase})
-    X = sorted(X, key = lambda i: i['amp'], reverse = True) 
-    return X
+
+    return sorted(X, key = lambda i: i['amp'], reverse = True) 
