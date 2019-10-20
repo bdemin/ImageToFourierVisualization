@@ -12,7 +12,7 @@ class Graphics(object):
 
     def __init__(self):
         pygame.init()
-        self.screen_size = (1200, 800)
+        self.screen_size = np.array((1200, 800))
         self.screen = pygame.display.set_mode(self.screen_size, 0, 32)
         self.clock = pygame.time.Clock()
 
@@ -32,7 +32,7 @@ class Graphics(object):
                     
             self.screen.fill((0, 0, 0))
 
-            last_center_pos = (600, 400)
+            last_center_pos = (self.screen_size / 2).astype(int)
             for epicycle in epicycles:
                 epicycle.update(last_center_pos, self.time)
                 last_center_pos = epicycle.dial_end_pos
