@@ -95,14 +95,14 @@ def build_data(N):
     return data
 
 
-def build_epicycles(N, screen, data):
+def build_epicycles(screen, data):
     # Function to build and return epicycle data
     # epicycles - list of dictionaries holding signal data
     
     epicycles = []
     center_pos = (0,0)
 
-    for i in range(N):
+    for i in range(len(data)):
         epicycles.append(Epicycle(screen, data[i]['amp'], data[i]['freq'], data[i]['phase'], center_pos))
         center_pos = epicycles[-1].dial_end_pos
 
@@ -110,16 +110,14 @@ def build_epicycles(N, screen, data):
 
 
 def main():
-    NUM_CYCLES = 5
-
     graphics = Graphics()
 
+    # NUM_CYCLES = 5
     # data = build_data(NUM_CYCLES)
     file = 'train.json'
     data = dft(load_json(file))
-    NUM_CYCLES = len(data)
 
-    epicycles = build_epicycles(NUM_CYCLES, graphics.screen, data)
+    epicycles = build_epicycles(graphics.screen, data)
 
     graphics.init_callback(epicycles)
 
