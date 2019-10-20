@@ -89,7 +89,7 @@ class Epicycle(object):
 
 
 def build_data(N):
-    # Function to build and return signal data for all epicycles
+    # Optional function to build and return signal data for all epicycles
     
     data = []
     center_pos = (600, 400)
