@@ -1,5 +1,4 @@
 import numpy as np
-import sys
 
 import pygame
 
@@ -23,12 +22,14 @@ class Graphics(object):
         # Begin visualization loop
 
         dt = 2 * np.pi / len(epicycles)
+        running = True
 
-        while True:
+        while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    running = False
                     pygame.quit()
-                    sys.exit()
+                    return
                     
             self.screen.fill((0, 0, 0))
 
