@@ -20,9 +20,7 @@ def dft(x):
         freq = k
         amp = np.sqrt(_sum.real * _sum.real + _sum.imag * _sum.imag)
         phase = np.arctan2(_sum.imag, _sum.real)
-        X.append({'re': _sum.real,
-                'im': _sum.imag,
-                'freq': freq,
+        X.append({'freq': freq,
                 'amp': amp,
                 'phase': phase})
     return X
