@@ -22,7 +22,7 @@ class Graphics(object):
     def init_callback(self, epicycles):
         # Begin visualization loop
 
-        self.dt = 2*np.pi / len(epicycles)
+        dt = 2 * np.pi / len(epicycles)
 
         while True:
             for event in pygame.event.get():
@@ -45,7 +45,9 @@ class Graphics(object):
             pygame.display.flip()
             self.clock.tick(10)
 
-            self.time += self.dt
+            self.time += dt
+
+
             
 class Epicycle(object):
     # Create Epicycle object to store signal data for visualization
