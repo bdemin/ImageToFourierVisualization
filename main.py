@@ -16,10 +16,13 @@ class Graphics(object):
         self.screen = pygame.display.set_mode(self.screen_size, 0, 32)
         self.clock = pygame.time.Clock()
 
+        self.time = 0
         self.end_points = []
      
     def init_callback(self, epicycles):
         # Begin visualization loop
+
+        self.dt = 2*np.pi / len(epicycles)
 
         while True:
             for event in pygame.event.get():
@@ -28,11 +31,10 @@ class Graphics(object):
                     sys.exit()
                     
             self.screen.fill((0, 0, 0))
-            time = pygame.time.get_ticks()/1000
 
             last_center_pos = (600, 400)
             for epicycle in epicycles:
-                epicycle.update(last_center_pos, time)
+                epicycle.update(last_center_pos, self.time)
                 last_center_pos = epicycle.dial_end_pos
                 epicycle.move()
 
@@ -41,9 +43,10 @@ class Graphics(object):
                 pygame.draw.aalines(self.screen, (50,255,50), False, self.end_points)
 
             pygame.display.flip()
-            self.clock.tick(100)
+            self.clock.tick(10)
 
-
+            self.time += self.dt
+            
 class Epicycle(object):
     # Create Epicycle object to store signal data for visualization
 
