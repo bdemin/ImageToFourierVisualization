@@ -67,7 +67,7 @@ class Epicycle(object):
     
     def move(self):
         self.circle = pygame.draw.circle(self.screen, (255, 255, 255),
-                                        self.center_pos, self.amp, 1)
+                                        self.center_pos, int(self.amp), 1)
         self.line = pygame.draw.line(self.screen, (255, 255, 255),
                                         self.center_pos, self.dial_end_pos, 2)
 
@@ -111,7 +111,10 @@ def main():
 
     graphics = Graphics()
 
-    data = build_data(NUM_CYCLES)
+    # data = build_data(NUM_CYCLES)
+    file = 'train.json'
+    data = dft(load_json(file))
+    NUM_CYCLES = len(data)
 
     epicycles = build_epicycles(NUM_CYCLES, graphics.screen, data)
 
