@@ -10,5 +10,6 @@ def load_json(path):
         data = data['drawing']
         data = [[x['x'], x['y']] for x in data]
 
-    skip = 100
+    skip = 10
     return np.asarray(data)[0 : -1 : skip]
+    
