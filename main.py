@@ -79,14 +79,16 @@ class Epicycle(object):
         
         self.center_pos = center_pos
         self.dial_end_pos = self.center_pos + self.amp * np.array((np.cos(phi), np.sin(phi)))
-        self.dial_end_pos = (int(self.dial_end_pos[0]), int(self.dial_end_pos[1]))
     
     def move(self):
-        self.circle = pygame.draw.circle(self.screen, (255, 255, 255),
-                                        self.center_pos, int(self.amp), 1)
-        self.line = pygame.draw.line(self.screen, (255, 255, 255),
-                                        self.center_pos, self.dial_end_pos, 2)
+        radius = 1 if round(self.amp)<1 else int(round(self.amp))
+        center = (int(self.center_pos[0]), int(self.center_pos[1]))
+        end = (int(self.dial_end_pos[0]), int(self.dial_end_pos[1]))
 
+        self.circle = pygame.draw.circle(self.screen, (255, 255, 255),
+                                        center, radius, 1)
+        self.line = pygame.draw.line(self.screen, (255, 255, 255),
+                                        center, end, 2)
 
 def build_data(N):
     # Optional function to build and return signal data for all epicycles
