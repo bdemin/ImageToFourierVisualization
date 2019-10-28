@@ -17,7 +17,7 @@ class Graphics(object):
 
         self.time = 0
         self.end_points = []
-     
+
     def init_callback(self):
         # Begin visualization loop
 
@@ -38,7 +38,7 @@ class Graphics(object):
             self.trace_drawing()
 
             pygame.display.flip()
-            self.clock.tick(10)
+            self.clock.tick(50)
 
             self.time += dt
 
@@ -129,9 +129,11 @@ def main():
     # NUM_CYCLES = 5
     # data = build_data(NUM_CYCLES)
     file = 'train.json'
-    data = dft(load_json(file))
+    point_data = load_json(file)
 
-    graphics.epicycles = build_epicycles(graphics.screen, data)
+    signal_data = dft(point_data)
+
+    graphics.epicycles = build_epicycles(graphics.screen, signal_data)
 
     graphics.init_callback()
 
