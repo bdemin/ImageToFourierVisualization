@@ -18,6 +18,24 @@ class Graphics(object):
         self.time = 0
         self.end_points = []
 
+    def drawing_mode(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+                    return
+
+            if pygame.mouse.get_pressed()[0]:
+                new_point = pygame.mouse.get_pos()
+                if self.last_point != new_point:
+                    self.drawing_points.append(new_point)
+                self.last_point = new_point
+
+            if not pygame.mouse.get_pressed()[0] and len(self.drawing_points) > 0:
+                self.is_drawing = False
+                return
+
     def init_callback(self):
         # Begin visualization loop
 
