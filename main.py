@@ -18,6 +18,10 @@ class Graphics(object):
         self.time = 0
         self.end_points = []
 
+        self.is_drawing = True
+        self.drawing_points = []
+        self.last_point = (0,0)
+
     def drawing_mode(self):
         while True:
             for event in pygame.event.get():
