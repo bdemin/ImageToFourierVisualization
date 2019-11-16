@@ -31,6 +31,10 @@ class Graphics(object):
                     pygame.quit()
                     return
                     
+            if self.is_drawing:
+                self.drawing_mode()
+                continue
+
             self.screen.fill((0, 0, 0))
 
             self.update_epicycles()
@@ -38,7 +42,7 @@ class Graphics(object):
             self.trace_drawing()
 
             pygame.display.flip()
-            self.clock.tick(50)
+            self.clock.tick(5000)
 
             self.time += dt
 
@@ -47,7 +51,8 @@ class Graphics(object):
                 self.end_points.clear()
 
     def update_epicycles(self):
-        last_center_pos = (self.screen_size / 2).astype(int)
+        # last_center_pos = (self.screen_size / 2).astype(int)
+        last_center_pos = (0,0)
         for epicycle in self.epicycles:
             epicycle.update(last_center_pos, self.time)
             last_center_pos = epicycle.dial_end_pos
@@ -58,7 +63,7 @@ class Graphics(object):
         if len(self.end_points) > 1:
             pygame.draw.aalines(self.screen, (50,255,50), False, self.end_points)
 
-            
+
 class Epicycle(object):
     # Create Epicycle object to store signal data for visualization
 
@@ -126,12 +131,15 @@ def build_epicycles(screen, data):
 def main():
     graphics = Graphics()
 
+    graphics.drawing_mode()
+
     # NUM_CYCLES = 5
     # data = build_data(NUM_CYCLES)
-    file = 'train.json'
-    point_data = load_json(file)
+    # file = 'train.json'
+    # point_data = load_json(file)
 
-    signal_data = dft(point_data)
+    signal_data = dft(graphics.drawing_points)
+    # signal_data = dft(point_data)
 
     graphics.epicycles = build_epicycles(graphics.screen, signal_data)
 
